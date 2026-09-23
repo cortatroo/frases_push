@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frases Diárias</title>
+    
+    <!-- Link para o Manifest (Transforma a página num PWA instalável) -->
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+        button { background-color: #4CAF50; color: white; border: none; padding: 15px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 20px; width: 100%;}
+        button:hover { background-color: #45a049; }
+    </style>
+
+    <!-- SDK do OneSignal -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "8adca996-a6fb-4e55-9651-58a5ebc7497a", // Substitua pelo ID que usou no script!
+        });
+      });
+
+      // Função para o botão pedir permissão ao utilizador
+      function pedirPermissao() {
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.slidedown.promptPush();
+        });
+      }
+    </script>
+</head>
+<body>
+    <div class="card">
+        <h2>Inspiração Diária 💡</h2>
+        <p>Receba notificações com frases inspiradoras diretamente no seu telemóvel, todos os dias.</p>
+        <button onclick="pedirPermissao()">Ativar Notificações</button>
+    </div>
+</body>
+</html>
