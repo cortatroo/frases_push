@@ -22,13 +22,17 @@
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "8adca996-a6fb-4e55-9651-58a5ebc7497a", // Substitua pelo ID que usou no script!
+          // Adicione a linha abaixo, colocando o nome do seu repositório onde está escrito "app-frases"
+          serviceWorkerParam: { scope: "/frases_push/" },
+          serviceWorkerPath: "OneSignalSDKWorker.js"
         });
       });
 
-      // Função para o botão pedir permissão ao utilizador
+      // Substitua a função pedirPermissao() antiga por esta:
       function pedirPermissao() {
         OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.slidedown.promptPush();
+            // Isso força o navegador a exibir a mensagem de permissão nativa
+            await OneSignal.Notifications.requestPermission();
         });
       }
     </script>
