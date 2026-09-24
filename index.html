@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Entre Nós - Frases</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <header>
+    <h1>ENTRE NÓS</h1>
+    <button id="themeToggle" class="icon-btn" title="Alternar tema"><span class="material-icons">dark_mode</span></button>
+  </header>
+
+  <!-- Banner de Tag Ativa -->
+  <div id="activeTagBanner" class="active-tag-banner" style="display: none;">
+    <span>Filtrando por: <strong id="selectedTagName"></strong></span>
+    <button id="btnClearTagFilter" class="clear-tag-btn" title="Limpar Filtro"><span class="material-icons">close</span></button>
+  </div>
+
+  <div class="search-container" id="searchContainer">
+    <span class="material-icons search-icon">search</span>
+    <input type="text" id="searchInput" placeholder="Buscar por frase, autor ou tag...">
+  </div>
+
+  <div class="tabs" id="tabsContainer">
+    <button id="tabEdicao" class="tab-btn active">Edição</button>
+    <button id="tabPostadas" class="tab-btn">Postadas</button>
+  </div>
+
+  <main id="mainContent">
+    <div id="quoteList">
+      <div class="loading">Carregando frases...</div>
+    </div>
+    <div id="tagList" style="display: none;"></div>
+  </main>
+
+  <button id="fabAdd" class="fab" title="Nova Frase"><span class="material-icons">add</span></button>
+
+  <nav class="bottom-nav">
+    <button id="navFrases" class="nav-btn active">
+      <span class="material-icons">format_quote</span>
+      <span>Frases</span>
+    </button>
+    <button id="navTags" class="nav-btn">
+      <span class="material-icons">settings</span>
+      <span>TAG</span>
+    </button>
+  </nav>
+
+  <!-- Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="closeModal" class="icon-btn" style="color:var(--text-color)"><span class="material-icons">arrow_back</span></button>
+        <h2 id="modalTitle">Cadastro frases</h2>
+      </div>
+      <div class="modal-body">
+        <label for="inputAuthor">Author (Opcional)</label>
+        <input type="text" id="inputAuthor" placeholder="Nome do autor">
+        
+        <label for="inputQuote">Quote</label>
+        <textarea id="inputQuote" placeholder="Insira sua frase aqui." rows="4"></textarea>
+        
+        <label for="inputTag">Tag</label>
+        <!-- O atributo "list" conecta este input ao datalist abaixo -->
+        <input type="text" id="inputTag" list="tagSuggestions" placeholder="Ex: Livros, Filosofia, Reflexão...">
+        
+        <!-- Datalist invisível que cria as sugestões de preenchimento -->
+        <datalist id="tagSuggestions"></datalist>
+      </div>
+      <div class="modal-footer">
+        <button id="btnCancel" class="btn-cancel"><span class="material-icons">block</span> CANCELAR</button>
+        <button id="btnSave" class="btn-save"><span class="material-icons">save</span> SALVAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast (Aviso de Cópia) -->
+  <div id="toast" class="toast">Frase copiada!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
