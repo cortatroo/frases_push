@@ -1,9 +1,8 @@
 :root {
-  /* Cores Claras (Alegres) */
   --bg-color: #f4f7f6;
   --text-color: #2d3436;
-  --primary-color: #6c5ce7; /* Roxo vibrante */
-  --secondary-color: #00cec9; /* Ciano */
+  --primary-color: #6c5ce7; 
+  --secondary-color: #00cec9; 
   --surface-color: #ffffff;
   --border-color: #dfe6e9;
   --card-bg: #ffffff;
@@ -14,7 +13,6 @@
 }
 
 [data-theme="dark"] {
-  /* Cores Escuras */
   --bg-color: #1a1b26;
   --text-color: #a9b1d6;
   --primary-color: #7aa2f7;
@@ -25,62 +23,28 @@
   --shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  padding-bottom: 75px;
-  transition: 0.3s;
-}
+body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 75px; transition: 0.3s; }
 
-/* Header com Gradiente */
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 18px 20px;
-  align-items: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  margin-bottom: 10px;
-}
+header { display: flex; justify-content: space-between; padding: 18px 20px; align-items: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; margin-bottom: 10px; }
 header h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: 1.5px; }
 header .icon-btn { color: white; }
 
 .icon-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-/* Busca */
 .search-container { margin: 15px 20px; position: relative; }
 .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a4b0be; }
 #searchInput { width: 100%; padding: 14px 14px 14px 45px; border: none; border-radius: 12px; background: var(--surface-color); color: var(--text-color); font-size: 0.95rem; box-shadow: var(--shadow); outline: none; }
 #searchInput:focus { outline: 2px solid var(--secondary-color); }
 
-/* Abas */
 .tabs { display: flex; margin: 10px 20px; background: var(--surface-color); border-radius: 12px; box-shadow: var(--shadow); padding: 5px; }
 .tab-btn { flex: 1; padding: 10px; background: none; border: none; color: #a4b0be; font-size: 0.95rem; font-weight: 500; cursor: pointer; border-radius: 8px; transition: 0.3s; }
 .tab-btn.active { background: var(--primary-color); color: white; font-weight: 600; }
 
 main { padding: 10px 20px; }
 
-/* Cards das Frases (Visual Moderno) */
-.quote-card {
-  background: var(--card-bg);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-}
-
+.quote-card { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; width: 100%; }
 .quote-content { flex: 1; }
 .quote-content blockquote { font-size: 1.05rem; line-height: 1.5; margin-bottom: 10px; font-weight: 500; font-style: italic; color: var(--text-color); }
@@ -90,7 +54,6 @@ main { padding: 10px 20px; }
 
 input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--success); cursor: pointer; border-radius: 4px; }
 
-/* Ícones de Ação Horizontais */
 .card-actions-horizontal { display: flex; justify-content: flex-end; gap: 12px; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border-color); }
 .action-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s, background 0.2s; }
 .action-btn:active { transform: scale(0.9); }
@@ -100,7 +63,17 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--success)
 .btn-edit { background: rgba(9, 132, 227, 0.15); color: var(--info); }
 .btn-delete { background: rgba(255, 118, 117, 0.15); color: var(--danger); }
 
-/* Navegação e Botões Flutuantes */
+/* --- SEÇÃO DE TAGS COMO CARDS --- */
+.tag-section-title { font-size: 1rem; margin-bottom: 15px; font-weight: 600; color: var(--text-color); }
+
+.tag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; }
+
+.tag-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; text-align: left; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; justify-content: center; min-height: 85px; }
+.tag-card:active { transform: scale(0.95); }
+.tag-card .tag-name { font-weight: 500; color: var(--text-color); margin-bottom: 4px; font-size: 0.9rem; word-break: break-word; line-height: 1.2; }
+.tag-card .tag-count { font-size: 0.75rem; color: #888; }
+/* --------------------------------- */
+
 .fab { position: fixed; bottom: 85px; right: 20px; background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)); color: white; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 28px; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4); cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 90; transition: 0.3s; }
 .fab:active { transform: scale(0.9); }
 
@@ -108,7 +81,6 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--success)
 .nav-btn { flex: 1; padding: 12px 0; background: none; border: none; color: #a4b0be; font-size: 0.75rem; font-weight: 500; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s;}
 .nav-btn.active { color: var(--primary-color); }
 
-/* Modais e Banners */
 .active-tag-banner { background-color: var(--primary-color); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; margin-bottom: 10px; border-radius: 8px; margin: 0 20px; box-shadow: var(--shadow); }
 .clear-tag-btn { background: none; border: none; color: white; cursor: pointer; }
 
@@ -123,6 +95,5 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--success)
 .btn-cancel { background: rgba(255, 118, 117, 0.15); color: var(--danger); }
 .btn-save { background: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); }
 
-/* Toast */
 .toast { visibility: hidden; min-width: 200px; background-color: var(--text-color); color: var(--bg-color); text-align: center; border-radius: 25px; padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 90px; transform: translateX(-50%); box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: 500; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
 .toast.show { visibility: visible; opacity: 1; bottom: 100px; }
