@@ -1,65 +1,71 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frases Diárias</title>
-    
-    <!-- Link para o Manifest (Transforma a página num PWA instalável) -->
-    <link rel="manifest" href="manifest.json">
-    
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
-        button { background-color: #4CAF50; color: white; border: none; padding: 15px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-top: 20px; width: 100%;}
-        button:hover { background-color: #45a049; }
-    </style>
-
-    <!-- SDK do OneSignal -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        
-        // 1. Inicialização do SDK
-        await OneSignal.init({
-          appId: "8adca996-a6fb-4e55-9651-58a5ebc7497a", 
-          serviceWorkerParam: { scope: "/frases_push/" },
-          serviceWorkerPath: "/frases_push/OneSignalSDKWorker.js?v=2"
-        });
-
-        // 2. ESCUTA O CLIQUE NOS BOTÕES DA NOTIFICAÇÃO
-        OneSignal.Notifications.addEventListener('click', function(event) {
-          const acao = event.result.actionId; 
-          
-          if (acao === 'btn-curtir' || acao === 'btn-favoritar') {
-            const idFrase = event.notification.additionalData ? event.notification.additionalData.id_frase : "desconhecido";
-            const urlAPI = "https://script.google.com/macros/s/AKfycbyFU2mgIQCCZrHR8FVKNg-xJnGxqehou41Zrc3cSFDhFArMPVNxj3oXlzPcPteOvRwK/exec" + "?acao=" + acao + "&idFrase=" + idFrase;
-            
-            fetch(urlAPI, { mode: 'no-cors' });
-            
-            if(acao === 'btn-curtir') {
-              alert("👍 Você curtiu esta frase!");
-            } else if (acao === 'btn-favoritar') {
-              alert("⭐ Frase salva nos favoritos com sucesso!");
-            }
-          }
-        });
-
-      });
-
-      function pedirPermissao() {
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.Notifications.requestPermission();
-        });
-      }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Entre Nós - Frases</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Link para o manifesto PWA -->
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <div class="card">
-        <h2>Inspiração Diária 💡</h2>
-        <p>Receba notificações com frases inspiradoras diretamente no seu telemóvel, todos os dias.</p>
-        <button onclick="pedirPermissao()">Ativar Notificações</button>
+
+  <header>
+    <h1>ENTRE NÓS</h1>
+    <button id="themeToggle" class="icon-btn"><span class="material-icons">dark_mode</span></button>
+  </header>
+
+  <div class="search-container">
+    <span class="material-icons search-icon">search</span>
+    <input type="text" id="searchInput" placeholder="Search...">
+  </div>
+
+  <div class="tabs">
+    <button id="tabEdicao" class="tab-btn active">Edição</button>
+    <button id="tabPostadas" class="tab-btn">Postadas</button>
+  </div>
+
+  <main id="quoteList">
+    <!-- As frases aparecerão aqui -->
+    <div class="loading">Carregando frases...</div>
+  </main>
+
+  <button id="fabAdd" class="fab"><span class="material-icons">add</span></button>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active"><span class="material-icons">format_quote</span><br>Frases</button>
+    <button class="nav-btn"><span class="material-icons">settings</span><br>TAG</button>
+  </nav>
+
+  <!-- Modal de Cadastro -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="closeModal" class="icon-btn"><span class="material-icons">arrow_back</span></button>
+        <h2>Cadastro frases</h2>
+      </div>
+      <div class="modal-body">
+        <label>Author (Opcional)</label>
+        <input type="text" id="inputAuthor" placeholder="Opcional">
+        
+        <span class="material-icons share-icon">share</span>
+        
+        <label>Quote</label>
+        <textarea id="inputQuote" placeholder="Insira sua frase aqui." rows="4"></textarea>
+        
+        <label>Tag</label>
+        <input type="text" id="inputTag" placeholder="Tag">
+        
+        <button class="add-tag-btn"><span class="material-icons">add</span> Salvar TAG</button>
+      </div>
+      <div class="modal-footer">
+        <button id="btnCancel" class="btn-cancel"><span class="material-icons">block</span> CANCEL</button>
+        <button id="btnSave" class="btn-save"><span class="material-icons">save</span> SAVE</button>
+      </div>
     </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
