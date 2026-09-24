@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Entre Nós - Frases</title>
   
-  <!-- Fonte Moderna do Google -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   
@@ -70,7 +69,11 @@
         <textarea id="inputQuote" placeholder="Insira sua frase aqui." rows="4"></textarea>
         
         <label for="inputTag">Tag</label>
-        <input type="text" id="inputTag" placeholder="Ex: Livros, Filosofia, Reflexão...">
+        <!-- O atributo "list" conecta este input ao datalist abaixo -->
+        <input type="text" id="inputTag" list="tagSuggestions" placeholder="Ex: Livros, Filosofia, Reflexão...">
+        
+        <!-- Datalist invisível que cria as sugestões de preenchimento -->
+        <datalist id="tagSuggestions"></datalist>
       </div>
       <div class="modal-footer">
         <button id="btnCancel" class="btn-cancel"><span class="material-icons">block</span> CANCELAR</button>
