@@ -26,26 +26,18 @@
           appId: "8adca996-a6fb-4e55-9651-58a5ebc7497a", 
           serviceWorkerParam: { scope: "/frases_push/" },
           serviceWorkerPath: "/frases_push/OneSignalSDKWorker.js?v=2"
-        }); // <--- FALTAVA FECHAR AQUI!
+        });
 
         // 2. ESCUTA O CLIQUE NOS BOTÕES DA NOTIFICAÇÃO
         OneSignal.Notifications.addEventListener('click', function(event) {
-          // Descobre qual botão foi clicado
           const acao = event.result.actionId; 
           
           if (acao === 'btn-curtir' || acao === 'btn-favoritar') {
-            
-            // Pega o ID da frase que veio da notificação
             const idFrase = event.notification.additionalData ? event.notification.additionalData.id_frase : "desconhecido";
-            
-            // === ATENÇÃO ===
-            // Substitua apenas o texto "COLE_AQUI_O_SEU_LINK_DO_WEB_APP" pelo seu link real do Apps Script
             const urlAPI = "https://script.google.com/macros/s/AKfycbyFU2mgIQCCZrHR8FVKNg-xJnGxqehou41Zrc3cSFDhFArMPVNxj3oXlzPcPteOvRwK/exec" + "?acao=" + acao + "&idFrase=" + idFrase;
             
-            // Envia silenciosamente para a Planilha
             fetch(urlAPI, { mode: 'no-cors' });
             
-            // Mostra um aviso simpático na tela do seu App
             if(acao === 'btn-curtir') {
               alert("👍 Você curtiu esta frase!");
             } else if (acao === 'btn-favoritar') {
