@@ -103,20 +103,36 @@ document.getElementById('btnSave').addEventListener('click', async () => {
 
   if (!frase) return alert("A frase é obrigatória!");
 
-  document.getElementById('btnSave').innerHTML = 'Salvando...';
+  const btnSave = document.getElementById('btnSave');
+  btnSave.innerHTML = 'Salvando...';
+  btnSave.disabled = true; // Desabilita o botão para evitar cliques duplos
 
-  await fetch(API_URL, {
-    method: 'POST',
-    body: JSON.stringify({ action: 'add', autor, frase, tag })
-  });
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      // O Content-Type text/plain evita bloqueios de CORS preflight no Google Scripts
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8', 
+      },
+      body: JSON.stringify({ action: 'add', autor, frase, tag })
+    });
 
-  document.getElementById('inputAuthor').value = '';
-  document.getElementById('inputQuote').value = '';
-  document.getElementById('inputTag').value = '';
-  modal.style.display = 'none';
-  document.getElementById('btnSave').innerHTML = '<span class="material-icons">save</span> SAVE';
-  
-  loadQuotes(); // Recarrega
+    // Se a requisição for bem sucedida
+    document.getElementById('inputAuthor').value = '';
+    document.getElementById('inputQuote').value = '';
+    document.getElementById('inputTag').value = '';
+    modal.style.display = 'none';
+    
+    loadQuotes(); // Recarrega a lista
+    
+  } catch (error) {
+    console.error("Erro ao salvar:", error);
+    alert("Erro ao salvar. Verifique se a URL do Apps Script está correta no app.js e se a API foi implantada corretamente.");
+  } finally {
+    // Independente de dar erro ou sucesso, o botão volta ao normal
+    btnSave.innerHTML = '<span class="material-icons">save</span> SAVE';
+    btnSave.disabled = false;
+  }
 });
 
 // Mover de Edição para Postada
