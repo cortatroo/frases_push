@@ -15,6 +15,7 @@ const tabsContainer = document.getElementById('tabsContainer');
 const activeTagBanner = document.getElementById('activeTagBanner');
 const selectedTagName = document.getElementById('selectedTagName');
 const btnClearTagFilter = document.getElementById('btnClearTagFilter');
+const tagSuggestionsDatalist = document.getElementById('tagSuggestions');
 
 const navFrases = document.getElementById('navFrases');
 const navTags = document.getElementById('navTags');
@@ -127,6 +128,10 @@ async function loadQuotes() {
   try {
     const response = await fetch(API_URL);
     quotes = await response.json();
+    
+    // Atualiza a lista de sugestões de Tags para o Modal
+    updateTagSuggestions();
+
     if (currentView === 'frases') {
       renderQuotes();
     } else {
@@ -136,6 +141,29 @@ async function loadQuotes() {
     console.error("Erro ao carregar frases:", error);
     quoteList.innerHTML = '<div class="loading">Erro ao carregar dados. Verifique a URL e a conexão.</div>';
   }
+}
+
+// --- POPULAR DATALIST (AUTOCOMPLETAR TAGS) ---
+function updateTagSuggestions() {
+  const uniqueTags = new Set();
+  
+  // Extrai todas as tags únicas já cadastradas
+  quotes.forEach(q => {
+    if (q.tag && q.tag.trim() !== '') {
+      const tagsArray = q.tag.split(',').map(t => t.trim());
+      tagsArray.forEach(t => {
+        if (t) uniqueTags.add(t);
+      });
+    }
+  });
+
+  // Limpa o datalist e recria as opções
+  tagSuggestionsDatalist.innerHTML = '';
+  uniqueTags.forEach(tag => {
+    const option = document.createElement('option');
+    option.value = tag;
+    tagSuggestionsDatalist.appendChild(option);
+  });
 }
 
 // --- RENDERIZAR FRASES ---
@@ -164,7 +192,6 @@ function renderQuotes() {
     const card = document.createElement('div');
     card.className = 'quote-card';
 
-    // Tratamento para evitar quebra de código ao copiar textos com aspas
     const fraseEscaped = q.frase.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     const autorEscaped = (q.autor || 'Desconhecido').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
@@ -181,7 +208,6 @@ function renderQuotes() {
         </div>
       `;
     } else {
-      // Na aba Postadas, deixamos apenas o botão de copiar!
       actionsHtml = `
         <div class="card-actions-horizontal">
           <button class="action-btn btn-copy" title="Copiar" onclick="copyQuote('${fraseEscaped}', '${autorEscaped}')"><span class="material-icons">content_copy</span></button>
@@ -206,7 +232,7 @@ function renderQuotes() {
   });
 }
 
-// --- RENDERIZAR GERENCIADOR DE TAGS ---
+// --- RENDERIZAR GERENCIADOR DE TAGS COMO CARDS ---
 function renderTagsView() {
   const tagCounts = {};
 
@@ -242,6 +268,7 @@ function renderTagsView() {
     const card = document.createElement('div');
     card.className = 'tag-card';
     card.onclick = () => filterByTag(tag);
+    // Layout do card como solicitado:
     card.innerHTML = `
       <div class="tag-name">${tag}</div>
       <div class="tag-count">${tagCounts[tag]} frase(s)</div>
@@ -343,7 +370,6 @@ loadQuotes();
 
 // --- FUNÇÃO PARA COPIAR FRASE ---
 window.copyQuote = function(frase, autor) {
-  // Monta o texto que vai para a área de transferência
   const textToCopy = `"${frase}"\n- ${autor}`;
   
   navigator.clipboard.writeText(textToCopy).then(() => {
@@ -360,5 +386,5 @@ function showToast() {
   toast.className = "toast show";
   setTimeout(() => { 
     toast.className = toast.className.replace("show", ""); 
-  }, 2500); // O aviso some após 2,5 segundos
+  }, 2500);
 }
