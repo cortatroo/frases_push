@@ -143,13 +143,8 @@ function renderQuotes() {
   const searchTerm = searchInput.value.trim().toLowerCase();
 
   const filtered = quotes.filter(q => {
-    // Filtro por Aba (Edição ou Postada)
     const matchStatus = q.status === currentTab;
-
-    // Filtro por Tag Selecionada (se houver)
     const matchTagFilter = !selectedTagFilter || (q.tag && q.tag.toLowerCase() === selectedTagFilter.toLowerCase());
-
-    // Filtro por Texto da Busca (Frase, Autor ou Tag)
     const matchSearch = !searchTerm || 
       (q.frase && q.frase.toLowerCase().includes(searchTerm)) || 
       (q.autor && q.autor.toLowerCase().includes(searchTerm)) || 
@@ -165,29 +160,47 @@ function renderQuotes() {
     return;
   }
 
-  // Exibe as mais recentes primeiro
   [...filtered].reverse().forEach(q => {
     const card = document.createElement('div');
     card.className = 'quote-card';
 
+    // Tratamento para evitar quebra de código ao copiar textos com aspas
+    const fraseEscaped = q.frase.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const autorEscaped = (q.autor || 'Desconhecido').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
     let actionsHtml = '';
+    let checkboxHtml = '';
+
     if (currentTab === 'Edição') {
+      checkboxHtml = `<input type="checkbox" title="Marcar como postada" onchange="markAsPosted('${q.id}')">`;
       actionsHtml = `
-        <input type="checkbox" title="Marcar como postada" onchange="markAsPosted('${q.id}')">
-        <button class="edit-btn" title="Editar" onclick="handleEditClick('${q.id}')"><span class="material-icons">edit</span></button>
-        <button class="delete-btn" title="Excluir" onclick="deleteQuote('${q.id}')"><span class="material-icons">delete</span></button>
+        <div class="card-actions-horizontal">
+          <button class="action-btn btn-copy" title="Copiar" onclick="copyQuote('${fraseEscaped}', '${autorEscaped}')"><span class="material-icons">content_copy</span></button>
+          <button class="action-btn btn-edit" title="Editar" onclick="handleEditClick('${q.id}')"><span class="material-icons">edit</span></button>
+          <button class="action-btn btn-delete" title="Excluir" onclick="deleteQuote('${q.id}')"><span class="material-icons">delete</span></button>
+        </div>
+      `;
+    } else {
+      // Na aba Postadas, deixamos apenas o botão de copiar!
+      actionsHtml = `
+        <div class="card-actions-horizontal">
+          <button class="action-btn btn-copy" title="Copiar" onclick="copyQuote('${fraseEscaped}', '${autorEscaped}')"><span class="material-icons">content_copy</span></button>
+        </div>
       `;
     }
 
     card.innerHTML = `
-      <div class="quote-content">
-        <blockquote><span class="material-icons" style="font-size:0.9rem; color:#888;">format_quote</span> ${q.frase}</blockquote>
-        <div class="author">${q.autor ? q.autor : 'Autor opcional'}</div>
-        ${q.tag ? `<span class="tag-chip" onclick="filterByTag('${q.tag}')">${q.tag}</span>` : ''}
+      <div class="card-top">
+        <div class="quote-content">
+          <blockquote><span class="material-icons quote-icon">format_quote</span>${q.frase}</blockquote>
+          <div class="author">${q.autor ? q.autor : 'Desconhecido'}</div>
+          ${q.tag ? `<span class="tag-chip" onclick="filterByTag('${q.tag}')">${q.tag}</span>` : ''}
+        </div>
+        <div>
+          ${checkboxHtml}
+        </div>
       </div>
-      <div class="card-actions">
-        ${actionsHtml}
-      </div>
+      ${actionsHtml}
     `;
     quoteList.appendChild(card);
   });
@@ -327,3 +340,25 @@ async function deleteQuote(id) {
 
 // Inicializar aplicativo
 loadQuotes();
+
+// --- FUNÇÃO PARA COPIAR FRASE ---
+window.copyQuote = function(frase, autor) {
+  // Monta o texto que vai para a área de transferência
+  const textToCopy = `"${frase}"\n- ${autor}`;
+  
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    showToast();
+  }).catch(err => {
+    console.error("Erro ao copiar: ", err);
+    alert("Não foi possível copiar a frase.");
+  });
+};
+
+// --- FUNÇÃO DO TOAST (AVISO VISUAL) ---
+function showToast() {
+  const toast = document.getElementById("toast");
+  toast.className = "toast show";
+  setTimeout(() => { 
+    toast.className = toast.className.replace("show", ""); 
+  }, 2500); // O aviso some após 2,5 segundos
+}
